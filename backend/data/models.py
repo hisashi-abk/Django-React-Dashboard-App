@@ -27,7 +27,7 @@ class Payment(models.Model):
     category = models.CharField(max_length=200)
 
 
-class SupermarketSales(models.Model):
+class SuperMarketSales(models.Model):
     unit_price = models.DecimalField(max_digits=10, decimal_places=2)
     quantity = models.IntegerField()
     date = models.DateField()
