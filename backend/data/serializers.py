@@ -37,3 +37,10 @@ class SuperMarketSalesSerializer(serializers.ModelSerializer):
             "productline",
             "payment",
         )
+
+
+class BrancheDataSerializer(serializers.Serializer):
+    id = serializers.IntegerField(source="branche")
+    label = serializers.CharField(source="branche__name")
+    value = serializers.IntegerField(source="quantity")
+    percentage = serializers.DecimalField(max_digits=10, decimal_places=2)

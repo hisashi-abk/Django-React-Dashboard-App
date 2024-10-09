@@ -1,55 +1,72 @@
-import { useState, useEffect } from "react";
-import axiosInstance from "./Axios";
-import type { SuperMarketSale } from "../store/types/types";
+import React, { useState, useEffect } from 'react';
+import AxiosInstance from './Axios';
+import MyPieChart from './charts/PieChart';
+import MyChartBox from './charts/ChartBox';
+import StoreIcon from '@mui/icons-material/Store';
 
-const Dashboard1 = () => {
-  const [salesData, setSalesData] = useState<SuperMarketSale[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+// APIから取得するデータの型定義
+interface BranchData {
+  id: number | string;
+  value: number;
+  label: string;
+  percentage: number;
+}
 
-  const fetchSalesData = async () => {
+// PieChartData型に変換するための関数
+const convertToPieChartData = (data: BranchData[]) => {
+  // カラーパレットの定義（必要に応じて色を追加）
+  const colors = [
+    '#FF6384',
+    '#36A2EB',
+    '#FFCE56',
+    '#4BC0C0',
+    '#9966FF',
+    '#FF9F40',
+    '#7BC043',
+    '#EC663C'
+  ];
+
+  return data.map((item, index) => ({
+    ...item,
+    color: colors[index % colors.length] // 循環的に色を割り当て
+  }));
+};
+
+const Dashboard = (): React.JSX.Element => {
+  // 状態の型を明示的に定義
+  const [myBranchData, setMyBranchData] = useState<BranchData[]>([]);
+
+  const getData = async (): Promise<void> => {
     try {
-      setIsLoading(true);
-      const response = await axiosInstance.get<SuperMarketSale[]>("/supermarketsales/");
-      setSalesData(response.data);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'データ取得に失敗しました');
-      console.error('Error fetching sales data', err);
-    } finally {
-      setIsLoading(false);
+      const response = await AxiosInstance.get<BranchData[]>('branchedata/');
+      setMyBranchData(response.data);
+    } catch (error) {
+      console.error('Error fetching branch data:', error);
     }
   };
 
   useEffect(() => {
-    fetchSalesData();
+    getData();
   }, []);
 
-  if (isLoading) {
-    return (
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-blue-500"></div>
-      </div>
-    )
-  }
-
-  if (error) {
-    return (
-      <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
-        <strong className="font-bold">エラー:</strong>
-        <span className="block sm:inline">{error}</span>
-      </div>
-    )
-  }
-
+  // データを変換してPieChartに渡す
+  const pieChartData = convertToPieChartData(myBranchData);
 
   return (
-    <div className="bg-base-100 rounded-lg p-6 shadow-lg">
-      <h2 className="text-2xl font-bold mb-4">Dashboard 1</h2>
-      <p className="text-base-content">
-        This is the Dashboard 1 page
-      </p>
+    <div className="p-4">
+      <MyChartBox
+        icon1={<StoreIcon className="text-blue-600 text-2xl" />}
+        title1="Quantities"
+        chart1={<MyPieChart myData={pieChartData} />}
+        icon2={<div />}
+        title2=""
+        chart2={<div />}
+        icon3={<div />}
+        title3=""
+        chart3={<div />}
+      />
     </div>
-  )
-}
+  );
+};
 
-export default Dashboard1;
+export default Dashboard;
