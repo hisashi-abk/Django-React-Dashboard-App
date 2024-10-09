@@ -34,14 +34,14 @@ const convertToPieChartData = (data: BranchData[]) => {
 
 const Dashboard = (): React.JSX.Element => {
   // 状態の型を明示的に定義
-  const [myBranchData, setMyBranchData] = useState<BranchData[]>([]);
+  const [myBrancheData, setMyBrancheData] = useState<BranchData[]>([]);
 
   const getData = async (): Promise<void> => {
     try {
       const response = await AxiosInstance.get<BranchData[]>('branchedata/');
-      setMyBranchData(response.data);
+      setMyBrancheData(response.data);
     } catch (error) {
-      console.error('Error fetching branch data:', error);
+      console.error('Error fetching branche data:', error);
     }
   };
 
@@ -50,7 +50,7 @@ const Dashboard = (): React.JSX.Element => {
   }, []);
 
   // データを変換してPieChartに渡す
-  const pieChartData = convertToPieChartData(myBranchData);
+  const pieChartData = convertToPieChartData(myBrancheData);
 
   return (
     <div className="p-4">
