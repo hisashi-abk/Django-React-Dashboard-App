@@ -1,56 +1,58 @@
-import * as React from 'react';
+import React from 'react';
+import { Grid, Box } from '@mui/material';
+import { ChartBoxProps } from '../../store/types/types';
 
-interface ChartBoxProps {
-  icon1: React.ReactNode;
-  title1: string;
-  chart1: React.ReactNode;
-  icon2: React.ReactNode;
-  title2: string;
-  chart2: React.ReactNode;
-  icon3: React.ReactNode;
-  title3: string;
-  chart3: React.ReactNode;
-}
-
-export default function MyChartBox(props: ChartBoxProps): React.JSX.Element {
-  const {icon1, title1, chart1, icon2, title2, chart2, icon3, title3, chart3} = props;
-
+const MyChartBox: React.FC<ChartBoxProps> = ({
+  icon1, title1, chart1,
+  icon2, title2, chart2,
+  icon3, title3, chart3
+}) => {
   return (
-    <div className="w-full">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {/* First Chart Section */}
-        <div className="bg-white rounded-lg shadow-lg p-6 transition-all duration-300 hover:shadow-xl">
-          <div className="flex items-center mb-4 space-x-3">
-            <div className="text-blue-600">{icon1}</div>
-            <h2 className="text-lg font-semibold text-gray-800">{title1}</h2>
-          </div>
-          <div className="w-full h-[200px] flex items-center justify-center">
+    <Box sx={{ padding: '20px' }}>
+      <Grid container spacing={4} sx={{ width: '100%', display: 'flex', minHeight: '200px', boxShadow: 3 }}>
+        <Grid
+          item xs={12} sm={12} md={6} lg={4}
+          sx={{ minHeight: '200px', padding: '20px', borderRight: '1px dotted #d3d3d3' }}
+        >
+          <Box sx={{ marginBottom: '20px', fontWeight: 'bold', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+            <Box sx={{ marginRight: '15px' }}>{icon1}</Box>
+            <Box>{title1}</Box>
+          </Box>
+          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: 'calc(100% - 60px)' }}>
             {chart1}
-          </div>
-        </div>
+          </Box>
+        </Grid>
 
-        {/* Second Chart Section */}
-        <div className="bg-white rounded-lg shadow-lg p-6 transition-all duration-300 hover:shadow-xl">
-          <div className="flex items-center mb-4 space-x-3">
-            <div className="text-green-600">{icon2}</div>
-            <h2 className="text-lg font-semibold text-gray-800">{title2}</h2>
-          </div>
-          <div className="w-full h-[200px] flex items-center justify-center">
+        <Grid
+          item xs={12} sm={12} md={6} lg={4}
+          sx={{ minHeight: '200px', padding: '20px', borderRight: '1px dotted #d3d3d3' }}
+        >
+          <Box sx={{ marginBottom: '20px', fontWeight: 'bold', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+            <Box sx={{ marginRight: '15px' }}>{icon2}</Box>
+            <Box>{title2}</Box>
+          </Box>
+          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: 'calc(100% - 60px)' }}>
             {chart2}
-          </div>
-        </div>
+          </Box>
+        </Grid>
 
-        {/* Third Chart Section */}
-        <div className="bg-white rounded-lg shadow-lg p-6 transition-all duration-300 hover:shadow-xl">
-          <div className="flex items-center mb-4 space-x-3">
-            <div className="text-purple-600">{icon3}</div>
-            <h2 className="text-lg font-semibold text-gray-800">{title3}</h2>
-          </div>
-          <div className="w-full h-[200px] flex items-center justify-center">
-            {chart3}
-          </div>
-        </div>
-      </div>
-    </div>
+        {icon3 && title3 && chart3 && (
+          <Grid
+            item xs={12} sm={12} md={6} lg={4}
+            sx={{ minHeight: '200px', padding: '20px', borderRight: '1px dotted #d3d3d3' }}
+          >
+            <Box sx={{ marginBottom: '20px', fontWeight: 'bold', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+              <Box sx={{ marginRight: '15px' }}>{icon3}</Box>
+              <Box>{title3}</Box>
+            </Box>
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: 'calc(100% - 60px)' }}>
+              {chart3}
+            </Box>
+          </Grid>
+        )}
+      </Grid>
+    </Box>
   );
 }
+
+export default MyChartBox;

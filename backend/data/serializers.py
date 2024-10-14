@@ -44,3 +44,9 @@ class BrancheDataSerializer(serializers.Serializer):
     label = serializers.CharField(source="branche__name")
     value = serializers.IntegerField(source="quantity")
     percentage = serializers.DecimalField(max_digits=10, decimal_places=2)
+
+
+class GenderDataSerializer(serializers.Serializer):
+    id = serializers.IntegerField(source="gender")
+    label = serializers.CharField(source="gender__name")
+    value = serializers.IntegerField(source="quantity")

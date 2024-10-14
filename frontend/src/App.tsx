@@ -11,7 +11,7 @@ const App: React.FC = () => {
       <Navbar
         content={
           <Routes>
-            <Route path="" element={<Dashboard1 />} />
+            <Route path="/" element={<Dashboard1 />} />
             <Route path="/dashboard2" element={<Dashboard2 />} />
           </Routes>
         }

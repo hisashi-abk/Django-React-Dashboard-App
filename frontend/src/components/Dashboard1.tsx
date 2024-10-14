@@ -1,47 +1,35 @@
 import React, { useState, useEffect } from 'react';
 import AxiosInstance from './Axios';
-import MyPieChart from './charts/PieChart';
 import MyChartBox from './charts/ChartBox';
+import MyPieChart from './charts/PieChart';
+import MyDonutChart from './charts/DonutChart';
 import StoreIcon from '@mui/icons-material/Store';
+import WcIcon from '@mui/icons-material/Wc';
+import { ChartDataPoint } from '../store/types/types';
 
-// APIから取得するデータの型定義
-interface BranchData {
-  id: number | string;
-  value: number;
-  label: string;
-  percentage: number;
-}
-
-// PieChartData型に変換するための関数
-const convertToPieChartData = (data: BranchData[]) => {
-  // カラーパレットの定義（必要に応じて色を追加）
-  const colors = [
-    '#FF6384',
-    '#36A2EB',
-    '#FFCE56',
-    '#4BC0C0',
-    '#9966FF',
-    '#FF9F40',
-    '#7BC043',
-    '#EC663C'
-  ];
-
-  return data.map((item, index) => ({
-    ...item,
-    color: colors[index % colors.length] // 循環的に色を割り当て
-  }));
-};
-
-const Dashboard = (): React.JSX.Element => {
-  // 状態の型を明示的に定義
-  const [myBrancheData, setMyBrancheData] = useState<BranchData[]>([]);
+const Dashboard1: React.FC = () => {
+  const [myBrancheData, setMyBrancheData] = useState<ChartDataPoint[]>([]);
+  const [myGenderData, setMyGenderData] = useState<ChartDataPoint[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const getData = async (): Promise<void> => {
     try {
-      const response = await AxiosInstance.get<BranchData[]>('branchedata/');
-      setMyBrancheData(response.data);
-    } catch (error) {
-      console.error('Error fetching branche data:', error);
+      setIsLoading(true);
+      setError(null);
+
+      const [brancheResponse, genderResponse] = await Promise.all([
+        AxiosInstance.get<ChartDataPoint[]>('branchedata/'),
+        AxiosInstance.get<ChartDataPoint[]>('genderdata/')
+      ]);
+
+      setMyBrancheData(brancheResponse.data);
+      setMyGenderData(genderResponse.data);
+    } catch (err) {
+      setError('Failed to fetch dashboard data');
+      console.error('Error fetching data:', err);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -49,24 +37,43 @@ const Dashboard = (): React.JSX.Element => {
     getData();
   }, []);
 
-  // データを変換してPieChartに渡す
-  const pieChartData = convertToPieChartData(myBrancheData);
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-full">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center h-full">
+        <div className="text-red-500">{error}</div>
+      </div>
+    );
+  }
+
+  const totalGenderCount = myGenderData.reduce((sum, data) => sum + data.value, 0);
 
   return (
-    <div className="p-4">
+    <div>
       <MyChartBox
-        icon1={<StoreIcon className="text-blue-600 text-2xl" />}
-        title1="Quantities"
-        chart1={<MyPieChart myData={pieChartData} />}
-        icon2={<div />}
-        title2=""
-        chart2={<div />}
-        icon3={<div />}
+        icon1={<StoreIcon />}
+        title1="Quantities per Branche"
+        chart1={<MyPieChart data={myBrancheData} centerlabel={myBrancheData.reduce((sum, data) => sum + data.value, 0)} />}
+        icon2={<WcIcon />}
+        title2="Quantities per Gender"
+        chart2={<MyDonutChart
+                  data={myGenderData}
+                  centerlabel={totalGenderCount}
+            />
+        }
+        icon3={null}
         title3=""
-        chart3={<div />}
+        chart3={null}
       />
     </div>
   );
 };
 
-export default Dashboard;
+export default Dashboard1;
