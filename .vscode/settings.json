@@ -3,15 +3,22 @@
     "Branche",
     "branchedata",
     "centerlabel",
+    "Combi",
     "customertype",
     "daisyui",
     "eerdu",
     "genderdata",
     "heroicons",
     "mwib",
+    "mydata",
+    "myseries",
+    "myxaxis",
     "posq",
+    "productbranche",
+    "productbranchedata",
     "productline",
     "Viewset",
-    "viewsets"
+    "viewsets",
+    "Xlabel"
   ]
 }

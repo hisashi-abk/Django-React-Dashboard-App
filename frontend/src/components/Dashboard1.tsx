@@ -5,11 +5,15 @@ import MyPieChart from './charts/PieChart';
 import MyDonutChart from './charts/DonutChart';
 import StoreIcon from '@mui/icons-material/Store';
 import WcIcon from '@mui/icons-material/Wc';
+import CategoryIcon from '@mui/icons-material/Category';
+import MyStackedBarChart, { ProductBrancheData } from './charts/StackedBarChart';
 import { ChartDataPoint } from '../store/types/types';
+
 
 const Dashboard1: React.FC = () => {
   const [myBrancheData, setMyBrancheData] = useState<ChartDataPoint[]>([]);
   const [myGenderData, setMyGenderData] = useState<ChartDataPoint[]>([]);
+  const [myProductBrancheData, setMyProductBrancheData] = useState<ProductBrancheData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -18,13 +22,15 @@ const Dashboard1: React.FC = () => {
       setIsLoading(true);
       setError(null);
 
-      const [brancheResponse, genderResponse] = await Promise.all([
+      const [brancheResponse, genderResponse, productbrancheResponse] = await Promise.all([
         AxiosInstance.get<ChartDataPoint[]>('branchedata/'),
-        AxiosInstance.get<ChartDataPoint[]>('genderdata/')
+        AxiosInstance.get<ChartDataPoint[]>('genderdata/'),
+        AxiosInstance.get<ProductBrancheData[]>('productbranchedata/'),
       ]);
 
       setMyBrancheData(brancheResponse.data);
       setMyGenderData(genderResponse.data);
+      setMyProductBrancheData(productbrancheResponse.data);
     } catch (err) {
       setError('Failed to fetch dashboard data');
       console.error('Error fetching data:', err);
@@ -53,6 +59,24 @@ const Dashboard1: React.FC = () => {
     );
   }
 
+  const myseries = [
+      {
+        dataKey: 'quantityBrancheA' as const,
+        label: 'BrancheA',
+        valueFormatter: (value: number | null) => value?.toString() ?? '',
+      },
+      {
+        dataKey: 'quantityBrancheB' as const,
+        label: 'BrancheB',
+        valueFormatter: (value: number | null) => value?.toString() ?? '',
+      },
+      {
+        dataKey: 'quantityBrancheC' as const,
+        label: 'BrancheC',
+        valueFormatter: (value: number | null) => value?.toString() ?? '',
+      },
+    ]
+
   const totalGenderCount = myGenderData.reduce((sum, data) => sum + data.value, 0);
 
   return (
@@ -68,9 +92,13 @@ const Dashboard1: React.FC = () => {
                   centerlabel={totalGenderCount}
             />
         }
-        icon3={null}
-        title3=""
-        chart3={null}
+        icon3={<CategoryIcon />}
+        title3="Quantities per Productline & Branche"
+        chart3={<MyStackedBarChart
+                    dataset={myProductBrancheData}
+                    XlabelName='productline__name'
+                    series={myseries}
+                  />}
       />
     </div>
   );

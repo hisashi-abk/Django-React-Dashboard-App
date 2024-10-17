@@ -21,6 +21,8 @@ export interface ChartDataPoint {
   color?: string;
 }
 
+export type ChartDataType = 'number' | 'string' | 'date';
+
 export interface SeriesConfig {
   dateKey: string;
   label?: string;
