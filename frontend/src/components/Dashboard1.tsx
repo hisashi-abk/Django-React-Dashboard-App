@@ -7,10 +7,11 @@ import StoreIcon from '@mui/icons-material/Store';
 import WcIcon from '@mui/icons-material/Wc';
 import CategoryIcon from '@mui/icons-material/Category';
 import MyStackedBarChart, { ProductBrancheData } from './charts/StackedBarChart';
-import { ChartDataPoint, CountryData } from '../store/types/types';
+import { ChartDataPoint, CombiChartSeries, CountryData } from '../store/types/types';
 import MyChartBox2 from './charts/ChartBox2';
 import PublicIcon from '@mui/icons-material/Public';
 import MyLineChart from './charts/LineChart';
+import MyCombiChart from './charts/CombiChart';
 
 
 const Dashboard1: React.FC = () => {
@@ -89,6 +90,24 @@ const Dashboard1: React.FC = () => {
     { dataKey: 'quantityFrance', label: 'France', type: 'line' as const },
   ]
 
+  const myproductbrancheseries: CombiChartSeries[] = [
+    {
+      dataKey: 'quantityBrancheA' as const,
+      label: 'Quantity BrancheA',
+      type: 'bar' as const,
+    },
+    {
+      dataKey: 'quantityBrancheB' as const,
+      label: 'Quantity BrancheB',
+      type: 'line' as const,
+    },
+    {
+      dataKey: 'quantityBrancheC' as const,
+      label: 'Quantity BrancheC',
+      type: 'line' as const,
+    },
+  ]
+
   const totalGenderCount = myGenderData.reduce((sum, data) => sum + data.value, 0);
 
   return (
@@ -124,9 +143,15 @@ const Dashboard1: React.FC = () => {
                     }))}
                   />
                 }
-        icon2={null}
-        title2={""}
-        chart2={null}
+        icon2={<PublicIcon/ >}
+        title2={"Quantities per Product Line per Branche"}
+        chart2={
+          <MyCombiChart
+            myData={myProductBrancheData}
+            myseries={myproductbrancheseries}
+            xcolumn='productline__name'
+          />
+        }
       />
     </div>
   );

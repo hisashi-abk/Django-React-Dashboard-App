@@ -54,3 +54,17 @@ export interface CountryData {
   quantityFrance: number;
   [key: string]: string | number;
 }
+
+export interface ProductBrancheData {
+  productline__name: string;
+  quantityBrancheA: number;
+  quantityBrancheB: number;
+  quantityBrancheC: number;
+  [key: string]: string | number;
+}
+
+export interface CombiChartSeries {
+  dataKey: 'quantityBrancheA' | 'quantityBrancheB' | 'quantityBrancheC';
+  label: string;
+  type: 'bar' | 'line';
+}
