@@ -7,13 +7,17 @@ import StoreIcon from '@mui/icons-material/Store';
 import WcIcon from '@mui/icons-material/Wc';
 import CategoryIcon from '@mui/icons-material/Category';
 import MyStackedBarChart, { ProductBrancheData } from './charts/StackedBarChart';
-import { ChartDataPoint } from '../store/types/types';
+import { ChartDataPoint, CountryData } from '../store/types/types';
+import MyChartBox2 from './charts/ChartBox2';
+import PublicIcon from '@mui/icons-material/Public';
+import MyLineChart from './charts/LineChart';
 
 
 const Dashboard1: React.FC = () => {
   const [myBrancheData, setMyBrancheData] = useState<ChartDataPoint[]>([]);
   const [myGenderData, setMyGenderData] = useState<ChartDataPoint[]>([]);
   const [myProductBrancheData, setMyProductBrancheData] = useState<ProductBrancheData[]>([]);
+  const [myCountryData, setMyCountryData] = useState<CountryData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -22,15 +26,17 @@ const Dashboard1: React.FC = () => {
       setIsLoading(true);
       setError(null);
 
-      const [brancheResponse, genderResponse, productbrancheResponse] = await Promise.all([
+      const [brancheResponse, genderResponse, productbrancheResponse, countryResponse] = await Promise.all([
         AxiosInstance.get<ChartDataPoint[]>('branchedata/'),
         AxiosInstance.get<ChartDataPoint[]>('genderdata/'),
         AxiosInstance.get<ProductBrancheData[]>('productbranchedata/'),
+        AxiosInstance.get<CountryData[]>('countrydata/'),
       ]);
 
       setMyBrancheData(brancheResponse.data);
       setMyGenderData(genderResponse.data);
       setMyProductBrancheData(productbrancheResponse.data);
+      setMyCountryData(countryResponse.data);
     } catch (err) {
       setError('Failed to fetch dashboard data');
       console.error('Error fetching data:', err);
@@ -77,6 +83,12 @@ const Dashboard1: React.FC = () => {
       },
     ]
 
+  const mycountryseries = [
+    { dataKey: 'quantityNetherlands', label: 'Netherlands', type: 'line' as const },
+    { dataKey: 'quantityGermany', label: 'Germany', type: 'line' as const },
+    { dataKey: 'quantityFrance', label: 'France', type: 'line' as const },
+  ]
+
   const totalGenderCount = myGenderData.reduce((sum, data) => sum + data.value, 0);
 
   return (
@@ -99,6 +111,22 @@ const Dashboard1: React.FC = () => {
                     XlabelName='productline__name'
                     series={myseries}
                   />}
+      />
+      <MyChartBox2
+        icon1={<PublicIcon />}
+        title1="Quantities per Month per Country"
+        chart1={<MyLineChart
+                    mydata={myCountryData}
+                    myxaxis='month_name'
+                    myseries={mycountryseries.map(series => ({
+                      ...series,
+                      type: 'line' as const,
+                    }))}
+                  />
+                }
+        icon2={null}
+        title2={""}
+        chart2={null}
       />
     </div>
   );

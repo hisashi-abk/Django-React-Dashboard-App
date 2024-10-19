@@ -46,3 +46,11 @@ export interface ChartBoxProps {
 export interface NavbarProps {
   content: React.ReactNode;
 }
+
+export interface CountryData {
+  month_name: string;
+  quantityNetherlands: number;
+  quantityGermany: number;
+  quantityFrance: number;
+  [key: string]: string | number;
+}

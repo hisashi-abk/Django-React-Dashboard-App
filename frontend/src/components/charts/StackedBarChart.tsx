@@ -22,7 +22,7 @@ interface StackedBarChartProps {
   }>;
 }
 
-const COLORS = ['#8884d8', '#82ca9d', '#ffc658'];
+const COLORS = ['#00bcd4', '#2196f3', '#9c27b0'];
 
 const MyStackedBarChart: React.FC<StackedBarChartProps> = ({
   dataset,
