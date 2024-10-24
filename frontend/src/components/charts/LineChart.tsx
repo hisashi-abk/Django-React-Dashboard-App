@@ -26,7 +26,7 @@ const MyLineChart: React.FC<MyLineChartProps> = ({ mydata, myxaxis, myseries }) 
         ...series,
         type: 'line' as const,
       }))}
-      width={580}
+      width={700}
       height={300}
     />
   );

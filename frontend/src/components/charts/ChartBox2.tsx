@@ -1,5 +1,4 @@
 import React from 'react';
-import { Grid, Box } from '@mui/material';
 
 interface ChartBox2Props {
   icon1: React.ReactNode;
@@ -10,41 +9,43 @@ interface ChartBox2Props {
   chart2: React.ReactNode;
 }
 
-const MyChartBox2: React.FC<ChartBox2Props> = ({
+const ChartBox2: React.FC<ChartBox2Props> = ({
   icon1, title1, chart1,
   icon2, title2, chart2
 }) => {
   return (
-    <Box>
-      <Grid container
-        sx={{ width: '100%', display: 'flex', minHeight: '200px', boxShadow: 3, justifyContent: 'space-evenly', marginTop: '20px' }}
-      >
-        <Grid
-          item xs={12} sm={12} md={6} lg={6}
-          sx={{ minHeight: '200px', padding: '20px', borderRight: '1px dotted #d3d3d3' }}
-        >
-          <Box sx={{ marginBottom: '20px', fontWeight: 'bold', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-            <Box sx={{ marginRight: '15px' }}>{icon1}</Box>
-            <Box>{title1}</Box>
-          </Box>
+    <div className="p-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="card bg-base-100 shadow-xl">
+          <div className="card-body">
+            <div className="flex items-center gap-2 mb-6">
+              <div className="text-gray-600 flex-shrink-0">
+                {icon1}
+              </div>
+              <h2 className="text-xl font-bold tracking-tight m-0">{title1}</h2>
+            </div>
+            <div className="min-h-[200px]">
+              {chart1}
+            </div>
+          </div>
+        </div>
 
-          <Box sx={{ marginBottom: '20px' }}>{chart1}</Box>
-        </Grid>
-
-        <Grid
-          item xs={12} sm={12} md={6} lg={6}
-          sx={{ minHeight: '200px', padding: '20px', borderRight: '1px dotted #d3d3d3' }}
-        >
-          <Box sx={{ marginBottom: '20px', fontWeight: 'bold', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-            <Box sx={{ marginRight: '15px' }}>{icon2}</Box>
-            <Box>{title2}</Box>
-          </Box>
-
-          <Box sx={{ marginBottom: '20px' }}>{chart2}</Box>
-        </Grid>
-      </Grid>
-    </Box>
+        <div className="card bg-base-100 shadow-xl">
+          <div className="card-body">
+            <div className="flex items-center gap-2 mb-6">
+              <div className="text-gray-600 flex-shrink-0">
+                {icon2}
+              </div>
+              <h2 className="text-xl font-bold tracking-tight m-0">{title2}</h2>
+            </div>
+            <div className="min-h-[200px]">
+              {chart2}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
 
-export default MyChartBox2;
+export default ChartBox2;
