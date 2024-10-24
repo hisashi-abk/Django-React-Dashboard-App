@@ -162,11 +162,7 @@ cython_debug/
 #.idea/
 
 myvenv
-.vscode
-settings.json
-
-Dashboard.jsx
-.DS_Store
+DS_Store
 
 
 # Logs
@@ -193,3 +189,4 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
