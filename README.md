@@ -112,8 +112,8 @@ Django と React で構築された最新のダッシュボードアプリケー
 
 ### 必要条件
 
-- Python 3.8 以上
-- Node.js 16 以上
+- Python 3.11 以上
+- Node.js 22 以上
 - npm または yarn
 
 ### インストール手順
